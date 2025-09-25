@@ -1,6 +1,6 @@
 import unittest
 unittest.main()
-from MyFunction import incrementals
+from increments import incrementals
 
 # define the unit tests
 class test_one(unittest.TestCase):
