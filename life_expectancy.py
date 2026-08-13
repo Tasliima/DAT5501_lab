@@ -17,10 +17,15 @@ testing = world[world["Year"] > 2013]
 print("Training data:", training["Year"].min(), "to", training["Year"].max())
 print("Testing data:", testing["Year"].min(), "to", testing["Year"].max())
 
-# Fit a first-order polynomial (straight line)
+# Prepare training data
 x_train = training["Year"].values
 y_train = training["Life expectancy"].values
 
-coefficients = np.polyfit(x_train, y_train, 1)
+# Fit polynomials from order 1 to 9
+models = {}
 
-print("Order 1 coefficients:", coefficients)
+for order in range(1, 10):
+    coefficients = np.polyfit(x_train, y_train, order)
+    models[order] = coefficients
+
+    print(f"Order {order} coefficients:", coefficients)
