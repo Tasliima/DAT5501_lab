@@ -1,11 +1,17 @@
 import pandas as pd
-import numpy as np
-import matplotlib as plt
+import matplotlib.pyplot as plt
 
 # Load election data
-election_data =pd.read_csv('US-2016-primary.csv',delimiter=';')
-print(election_data.head())
+election_data = pd.read_csv('US-2016-primary.csv', delimiter=';')
 
-# Create a histogram of the votes for each candidate by state
-election_data.hist(column='Votes', by='State', figsize=(15.10), bins=20)
-plt.plot.show()
+# Select Donald Trump's results
+trump = election_data[election_data['candidate'] == 'Donald Trump']
+
+# Create a histogram of Trump's fraction of votes
+plt.hist(trump['fraction_votes'], bins=20)
+
+plt.xlabel('Fraction of Votes')
+plt.ylabel('Number of Counties')
+plt.title("Donald Trump's Vote Fraction")
+
+plt.show()
