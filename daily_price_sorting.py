@@ -47,3 +47,33 @@ plt.ylabel("Sorting time (seconds)")
 plt.title("Sorting Time vs Number of Price Changes")
 
 plt.show()
+
+# Store the number of elements and sorting times
+n_values = []
+sorting_times = []
+
+# Test sorting times for different values of n
+for n in range(7, min(366, len(price_changes) + 1)):
+
+    # Select the first n price changes
+    values = price_changes[:n].copy()
+
+    # Start timer
+    start_time = time.perf_counter()
+
+    # Sort the price changes
+    np.sort(values)
+
+    # Stop timer
+    end_time = time.perf_counter()
+
+    # Calculate elapsed time
+    sorting_time = end_time - start_time
+
+    # Store results
+    n_values.append(n)
+    sorting_times.append(sorting_time)
+
+print("Number of tests:", len(n_values))
+print("First sorting time:", sorting_times[0])
+print("Last sorting time:", sorting_times[-1])
