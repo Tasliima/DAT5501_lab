@@ -33,10 +33,17 @@ ax2.set_ylabel("Daily Percentage Change (%)")
 ax2.set_title("NVIDIA Daily Percentage Change")
 ax2.tick_params(axis="x", rotation=45)
 
-plt.tight_layout()
-plt.show()
-
-# Calculate standard deviation of daily percentage changes
+# Calculate standard deviation
 standard_deviation = data["Daily Change (%)"].std()
 
-print("Standard deviation of daily percentage changes:", standard_deviation)
+# Add standard deviation as a text box
+fig.text(
+    0.5, 0.01,
+    f"Standard deviation of daily percentage changes: {standard_deviation:.2f}%",
+    ha="center",
+    fontsize=11,
+    bbox=dict(boxstyle="round,pad=0.5", facecolor="white", edgecolor="black")
+)
+
+plt.tight_layout(rect=[0, 0.08, 1, 1])
+plt.show()
