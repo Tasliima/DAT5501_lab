@@ -29,3 +29,44 @@ for order in range(1, 10):
     models[order] = coefficients
 
     print(f"Order {order} coefficients:", coefficients)
+
+# Forecast the final 10 years
+x_test = testing["Year"].values
+y_test = testing["Life expectancy"].values
+
+forecasts = {}
+
+for order, coefficients in models.items():
+    predictions = np.polyval(coefficients, x_test)
+    forecasts[order] = predictions
+
+    print(f"Order {order} forecast:")
+    print(predictions)
+
+# Plot the actual data
+plt.plot(
+    x_train,
+    y_train,
+    label="Training data"
+)
+
+plt.plot(
+    x_test,
+    y_test,
+    label="Actual 2014-2023"
+)
+
+# Plot each polynomial forecast
+for order, predictions in forecasts.items():
+    plt.plot(
+        x_test,
+        predictions,
+        label=f"Order {order}"
+    )
+
+plt.xlabel("Year")
+plt.ylabel("Life expectancy")
+plt.title("Polynomial Forecasts vs Actual Life Expectancy")
+plt.legend()
+
+plt.show()
