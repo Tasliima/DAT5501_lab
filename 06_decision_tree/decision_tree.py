@@ -19,7 +19,7 @@ columns = [
 ]
 
 # Load dataset
-data = pd.read_csv("wdbc.data", header=None, names=columns)
+data = pd.read_csv("06_decision_tree/wdbc.data", header=None, names=columns)
 
 # Separate features and target
 X = data.drop(columns=["id", "diagnosis"])
