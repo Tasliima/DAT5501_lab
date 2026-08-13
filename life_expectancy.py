@@ -22,14 +22,49 @@ y_train = training["Life expectancy"].values
 
 # Fit polynomial models from order 1 to 9
 models = {}
+covariance_matrix = None
 
 for order in range(1, 10):
-    coefficients = np.polyfit(x_train, y_train, order)
+
+    if order == 4:
+        coefficients, covariance_matrix = np.polyfit(
+            x_train,
+            y_train,
+            order,
+            cov=True
+        )
+    else:
+        coefficients = np.polyfit(
+            x_train,
+            y_train,
+            order
+        )
+
     models[order] = coefficients
 
     print(f"Order {order} coefficients:", coefficients)
 
-# Prepare testing data
+# Print parameter values and uncertainties for the best model
+print("\nBest model: Order 4")
+print("Parameter values:")
+
+uncertainties = np.sqrt(np.diag(covariance_matrix))
+
+for i, parameter in enumerate(models[4]):
+    print(
+        f"Parameter {i + 1}: "
+        f"{parameter:.6g} +/- {uncertainties[i]:.6g}"
+    )
+
+print("\nCovariance matrix:")
+print(covariance_matrix)
+
+for i, parameter in enumerate(covariance_matrix.diagonal()):
+    uncertainty = np.sqrt(parameter)
+    print(f"Parameter {i + 1}: {models[4][i]:.6g} +/- {uncertainty:.6g}")
+
+print("\nCovariance matrix:")
+print(covariance_matrix)# Prepare testing data
 x_test = testing["Year"].values
 y_test = testing["Life expectancy"].values
 
