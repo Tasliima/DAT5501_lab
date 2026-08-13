@@ -60,4 +60,7 @@ plt.ylabel("Sorting time (seconds)")
 plt.title("Sorting Time vs n")
 plt.legend()
 
+# The measured sorting time broadly follows the shape of the n log n curve.
+# However the measurements are a bit messy because the sorting operations are very fast.
+
 plt.show()
