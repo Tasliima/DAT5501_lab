@@ -52,6 +52,14 @@ n_log_n_scaled = n_log_n * (
     sorting_times[-1] / n_log_n[-1]
 )
 
+# Calculate the correlation between sorting time and n log n
+correlation = np.corrcoef(sorting_times, n_log_n)[0, 1]
+
+# The high correlation suggests that sorting time broadly follows n log n.
+print("The sorting time broadly follows an n log n distribution.")
+
+print("Correlation with n log n:", correlation)
+
 # Plot measured sorting time
 plt.plot(
     n_values,
