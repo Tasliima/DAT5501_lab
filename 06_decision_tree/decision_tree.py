@@ -137,9 +137,7 @@ plt.show()
 from sklearn.model_selection import cross_val_score
 from sklearn.metrics import roc_curve, roc_auc_score
 
-# ---------------------------------------------------------
 # DECISION TREE VALIDATION
-# ---------------------------------------------------------
 
 print()
 print("Decision Tree Validation")
@@ -153,9 +151,7 @@ validation_model = DecisionTreeClassifier(
 
 validation_model.fit(X_train, y_train)
 
-# ---------------------------------------------------------
 # ROC CURVE
-# ---------------------------------------------------------
 
 # Get predicted probabilities for the malignant class
 y_prob = validation_model.predict_proba(X_test)[:, 1]
@@ -193,9 +189,7 @@ plt.grid(True)
 plt.savefig("decision_tree_roc.png")
 plt.show()
 
-# ---------------------------------------------------------
 # CROSS-VALIDATION
-# ---------------------------------------------------------
 
 cv_scores = cross_val_score(
     validation_model,
@@ -215,9 +209,8 @@ for i, score in enumerate(cv_scores, start=1):
 print(f"Mean F1: {cv_scores.mean():.3f}")
 print(f"Standard deviation: {cv_scores.std():.3f}")
 
-# ---------------------------------------------------------
+
 # OBSERVED AND DERIVED VARIABLES
-# ---------------------------------------------------------
 
 print()
 print("Observed and Derived Variables")
