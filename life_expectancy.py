@@ -69,7 +69,20 @@ for order, chi_value in chi_squared.items():
         f"Order {order} chi-squared per degree of freedom:",
         reduced_chi_squared
     )
+# Calculate BIC for each model
+bic_values = {}
 
+n = len(y_test)
+
+for order, chi_value in chi_squared.items():
+    k = order + 1
+
+    bic = n * np.log(chi_value / n) + k * np.log(n)
+
+    bic_values[order] = bic
+
+    print(f"Order {order} BIC:", bic)
+    
 # Create two graphs side by side
 fig, axes = plt.subplots(1, 2, figsize=(16, 6))
 
