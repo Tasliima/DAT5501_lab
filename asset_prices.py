@@ -35,3 +35,8 @@ ax2.tick_params(axis="x", rotation=45)
 
 plt.tight_layout()
 plt.show()
+
+# Calculate standard deviation of daily percentage changes
+standard_deviation = data["Daily Change (%)"].std()
+
+print("Standard deviation of daily percentage changes:", standard_deviation)
