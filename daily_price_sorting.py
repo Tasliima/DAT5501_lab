@@ -7,7 +7,9 @@ import matplotlib.pyplot as plt
 data = pd.read_csv("HistoricalData_1786643334520.csv")
 
 # Clean the Close/Last column
-data["Close/Last"] = data["Close/Last"].replace(r"[$,]", "", regex=True).astype(float)
+data["Close/Last"] = data["Close/Last"].replace(
+    r"[$,]", "", regex=True
+).astype(float)
 
 # Calculate daily price changes
 prices = data["Close/Last"].values
@@ -23,17 +25,16 @@ for n in range(7, min(366, len(price_changes) + 1)):
     # Select the first n price changes
     values = price_changes[:n].copy()
 
-    # Start timer
+    # Time the sorting operation 100 times
     start_time = time.perf_counter()
 
-    # Sort the price changes
-    np.sort(values)
+    for _ in range(100):
+        np.sort(values)
 
-    # Stop timer
     end_time = time.perf_counter()
 
-    # Calculate elapsed time
-    sorting_time = end_time - start_time
+    # Calculate average sorting time
+    sorting_time = (end_time - start_time) / 100
 
     # Store results
     n_values.append(n)
@@ -47,20 +48,30 @@ sorting_times = np.array(sorting_times)
 n_log_n = n_values * np.log(n_values)
 
 # Scale n log n to match the measured sorting times
-n_log_n_scaled = n_log_n * (sorting_times[-1] / n_log_n[-1])
+n_log_n_scaled = n_log_n * (
+    sorting_times[-1] / n_log_n[-1]
+)
 
 # Plot measured sorting time
-plt.plot(n_values, sorting_times, label="Measured sorting time")
+plt.plot(
+    n_values,
+    sorting_times,
+    label="Measured sorting time"
+)
 
 # Plot n log n
-plt.plot(n_values, n_log_n_scaled, label="n log n")
+plt.plot(
+    n_values,
+    n_log_n_scaled,
+    label="n log n"
+)
 
 plt.xlabel("Number of elements (n)")
-plt.ylabel("Sorting time (seconds)")
+plt.ylabel("Average sorting time (seconds)")
 plt.title("Sorting Time vs n")
 plt.legend()
 
-# The measured sorting time broadly follows the shape of the n log n curve.
-# However the measurements are a bit messy because the sorting operations are very fast.
+# Conclusion
+# The measured sorting time broadly follows the shape of the n log n curve, although there is some messiness because the sorting operations are very fast.
 
 plt.show()
