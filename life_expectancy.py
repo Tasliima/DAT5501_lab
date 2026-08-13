@@ -16,27 +16,6 @@ testing = world[world["Year"] > 2013]
 print("Training data:", training["Year"].min(), "to", training["Year"].max())
 print("Testing data:", testing["Year"].min(), "to", testing["Year"].max())
 
-# Plot the full global life expectancy dataset
-plt.figure(figsize=(12, 6))
-
-plt.plot(
-    world["Year"],
-    world["Life expectancy"],
-    marker="o",
-    label="World life expectancy"
-)
-
-plt.xlabel("Year")
-plt.ylabel("Life expectancy")
-plt.title("Global Life Expectancy, 1770-2023")
-plt.legend()
-
-# Save the full historical plot
-plt.savefig("global_life_expectancy.png")
-
-plt.show()
-
-
 # Prepare training data
 x_train = training["Year"].values
 y_train = training["Life expectancy"].values
@@ -49,7 +28,6 @@ for order in range(1, 10):
     models[order] = coefficients
 
     print(f"Order {order} coefficients:", coefficients)
-
 
 # Prepare testing data
 x_test = testing["Year"].values
@@ -65,7 +43,7 @@ for order, coefficients in models.items():
     print(f"Order {order} forecast:")
     print(predictions)
 
-# Calculate the sum of squared residuals for each model
+# Calculate chi-squared for each model
 chi_squared = {}
 
 for order, predictions in forecasts.items():
@@ -91,28 +69,46 @@ for order, chi_value in chi_squared.items():
         f"Order {order} chi-squared per degree of freedom:",
         reduced_chi_squared
     )
-# Plot the polynomial forecasts
-plt.figure(figsize=(12, 6))
 
-# Plot actual life expectancy
-plt.plot(
+# Create two graphs side by side
+fig, axes = plt.subplots(1, 2, figsize=(16, 6))
+
+# Left graph: full historical data
+axes[0].plot(
+    world["Year"],
+    world["Life expectancy"],
+    marker="o",
+    label="World life expectancy"
+)
+
+axes[0].set_xlabel("Year")
+axes[0].set_ylabel("Life expectancy")
+axes[0].set_title("Global Life Expectancy, 1770-2023")
+axes[0].legend()
+
+# Right graph: polynomial forecasts
+axes[1].plot(
     x_test,
     y_test,
     marker="o",
     label="Actual"
 )
 
-# Plot each polynomial forecast
 for order, predictions in forecasts.items():
-    plt.plot(
+    axes[1].plot(
         x_test,
         predictions,
         label=f"Order {order}"
     )
 
-plt.xlabel("Year")
-plt.ylabel("Life expectancy")
-plt.title("Polynomial Forecasts vs Actual Life Expectancy (2014-2023)")
-plt.legend()
+axes[1].set_xlabel("Year")
+axes[1].set_ylabel("Life expectancy")
+axes[1].set_title("Polynomial Forecasts vs Actual")
+axes[1].legend()
+
+plt.tight_layout()
+
+# Save the combined figure
+plt.savefig("life_expectancy_forecasts.png")
 
 plt.show()
