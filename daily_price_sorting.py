@@ -85,4 +85,25 @@ plt.xlabel("Number of elements (n)")
 plt.ylabel("Sorting time (seconds)")
 plt.title("Sorting Time vs Number of Price Changes")
 
+# Convert results to numpy arrays
+n_values = np.array(n_values)
+sorting_times = np.array(sorting_times)
+
+# Calculate n log n
+n_log_n = n_values * np.log(n_values)
+
+# Scale n log n to match the measured sorting times
+n_log_n_scaled = n_log_n * (sorting_times[-1] / n_log_n[-1])
+
+# Plot measured sorting time
+plt.plot(n_values, sorting_times, label="Measured sorting time")
+
+# Plot n log n
+plt.plot(n_values, n_log_n_scaled, label="n log n")
+
+plt.xlabel("Number of elements (n)")
+plt.ylabel("Sorting time (seconds)")
+plt.title("Sorting Time vs n")
+plt.legend()
+
 plt.show()
