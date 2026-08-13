@@ -77,3 +77,12 @@ for n in range(7, min(366, len(price_changes) + 1)):
 print("Number of tests:", len(n_values))
 print("First sorting time:", sorting_times[0])
 print("Last sorting time:", sorting_times[-1])
+
+# Plot sorting time against n
+plt.plot(n_values, sorting_times)
+
+plt.xlabel("Number of elements (n)")
+plt.ylabel("Sorting time (seconds)")
+plt.title("Sorting Time vs Number of Price Changes")
+
+plt.show()
