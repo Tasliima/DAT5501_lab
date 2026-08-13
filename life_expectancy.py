@@ -8,20 +8,40 @@ data = pd.read_csv("life-expectancy.csv")
 # Select global data
 world = data[data["Entity"] == "World"]
 
-# Use all data except the final 10 years for fitting
+# Split the data into training and testing sets
+# The final 10 years are kept for testing
 training = world[world["Year"] <= 2013]
-
-# Keep the final 10 years to compare our forecasts with reality
 testing = world[world["Year"] > 2013]
 
 print("Training data:", training["Year"].min(), "to", training["Year"].max())
 print("Testing data:", testing["Year"].min(), "to", testing["Year"].max())
 
+# Plot the full global life expectancy dataset
+plt.figure(figsize=(12, 6))
+
+plt.plot(
+    world["Year"],
+    world["Life expectancy"],
+    marker="o",
+    label="World life expectancy"
+)
+
+plt.xlabel("Year")
+plt.ylabel("Life expectancy")
+plt.title("Global Life Expectancy, 1770-2023")
+plt.legend()
+
+# Save the full historical plot
+plt.savefig("global_life_expectancy.png")
+
+plt.show()
+
+
 # Prepare training data
 x_train = training["Year"].values
 y_train = training["Life expectancy"].values
 
-# Fit polynomials from order 1 to 9
+# Fit polynomial models from order 1 to 9
 models = {}
 
 for order in range(1, 10):
@@ -30,10 +50,12 @@ for order in range(1, 10):
 
     print(f"Order {order} coefficients:", coefficients)
 
-# Forecast the final 10 years
+
+# Prepare testing data
 x_test = testing["Year"].values
 y_test = testing["Life expectancy"].values
 
+# Forecast the final 10 years
 forecasts = {}
 
 for order, coefficients in models.items():
@@ -43,17 +65,16 @@ for order, coefficients in models.items():
     print(f"Order {order} forecast:")
     print(predictions)
 
-# Plot the actual data
-plt.plot(
-    x_train,
-    y_train,
-    label="Training data"
-)
 
+# Plot the polynomial forecasts
+plt.figure(figsize=(12, 6))
+
+# Plot actual life expectancy
 plt.plot(
     x_test,
     y_test,
-    label="Actual 2014-2023"
+    marker="o",
+    label="Actual"
 )
 
 # Plot each polynomial forecast
@@ -66,7 +87,7 @@ for order, predictions in forecasts.items():
 
 plt.xlabel("Year")
 plt.ylabel("Life expectancy")
-plt.title("Polynomial Forecasts vs Actual Life Expectancy")
+plt.title("Polynomial Forecasts vs Actual Life Expectancy (2014-2023)")
 plt.legend()
 
 plt.show()
