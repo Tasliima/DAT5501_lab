@@ -17,41 +17,6 @@ price_changes = prices[:-1] - prices[1:]
 n_values = []
 sorting_times = []
 
-# Test different data sizes from 7 to 365
-for n in range(7, min(366, len(price_changes) + 1)):
-
-    values = price_changes[:n].copy()
-
-    start_time = time.perf_counter()
-
-    np.sort(values)
-
-    end_time = time.perf_counter()
-
-    sorting_time = end_time - start_time
-
-    n_values.append(n)
-    sorting_times.append(sorting_time)
-
-# Calculate daily price changes
-prices = data["Close/Last"].values
-price_changes = prices[:-1] - prices[1:]
-
-print(price_changes[:10])
-
-# Plot sorting time against n
-plt.plot(n_values, sorting_times)
-
-plt.xlabel("Number of elements (n)")
-plt.ylabel("Sorting time (seconds)")
-plt.title("Sorting Time vs Number of Price Changes")
-
-plt.show()
-
-# Store the number of elements and sorting times
-n_values = []
-sorting_times = []
-
 # Test sorting times for different values of n
 for n in range(7, min(366, len(price_changes) + 1)):
 
@@ -73,17 +38,6 @@ for n in range(7, min(366, len(price_changes) + 1)):
     # Store results
     n_values.append(n)
     sorting_times.append(sorting_time)
-
-print("Number of tests:", len(n_values))
-print("First sorting time:", sorting_times[0])
-print("Last sorting time:", sorting_times[-1])
-
-# Plot sorting time against n
-plt.plot(n_values, sorting_times)
-
-plt.xlabel("Number of elements (n)")
-plt.ylabel("Sorting time (seconds)")
-plt.title("Sorting Time vs Number of Price Changes")
 
 # Convert results to numpy arrays
 n_values = np.array(n_values)
