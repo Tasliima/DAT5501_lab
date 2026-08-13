@@ -14,8 +14,7 @@ jobs:
 
       - run:
           name: Run unit tests
-          command: pytest test_pipeline.py
-
+          command: pytest 04_data_pipeline/test_pipeline.py
 workflows:
   version: 2
   build:

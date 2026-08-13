@@ -1,25 +1,27 @@
+from pathlib import Path
 import unittest
-import os
 import pandas as pd
 import numpy as np
+
+BASE_DIR = Path(__file__).resolve().parent
 
 
 class TestDataPipeline(unittest.TestCase):
 
     def test_csv_exists(self):
-        self.assertTrue(os.path.exists("synthetic_data.csv"))
+        self.assertTrue((BASE_DIR / "synthetic_data.csv").exists())
 
     def test_plot_exists(self):
-        self.assertTrue(os.path.exists("synthetic_data_plot.png"))
+        self.assertTrue((BASE_DIR / "synthetic_data_plot.png").exists())
 
     def test_data_is_numeric(self):
-        data = pd.read_csv("synthetic_data.csv")
+        data = pd.read_csv(BASE_DIR / "synthetic_data.csv")
 
         self.assertTrue(pd.api.types.is_numeric_dtype(data["x"]))
         self.assertTrue(pd.api.types.is_numeric_dtype(data["y"]))
 
     def test_slope_and_intercept(self):
-        data = pd.read_csv("synthetic_data.csv")
+        data = pd.read_csv(BASE_DIR / "synthetic_data.csv")
 
         x = data["x"]
         y = data["y"]
