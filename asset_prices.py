@@ -13,12 +13,26 @@ data["Close/Last"] = data["Close/Last"].str.replace("$", "").astype(float)
 # Sort dates from oldest to newest
 data = data.sort_values("Date")
 
+# Calculate daily percentage change
+data["Daily Change (%)"] = data["Close/Last"].pct_change() * 100
+
 # Plot closing price against date
 plt.plot(data["Date"], data["Close/Last"])
 
 plt.xlabel("Date")
 plt.ylabel("Closing Price ($)")
 plt.title("NVIDIA Closing Price Across One Year")
+
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.show()
+
+# Plot daily percentage change
+plt.plot(data["Date"], data["Daily Change (%)"])
+
+plt.xlabel("Date")
+plt.ylabel("Daily Percentage Change (%)")
+plt.title("NVIDIA Daily Percentage Change")
 
 plt.xticks(rotation=45)
 plt.tight_layout()
