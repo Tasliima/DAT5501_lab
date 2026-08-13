@@ -1,6 +1,11 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy.optimize import curve_fit
+
+# Define exponential model
+def exponential_model(x, a, b):
+    return a * np.exp(b * x)
 
 # Load the life expectancy data
 data = pd.read_csv("life-expectancy.csv")
@@ -44,6 +49,26 @@ for order in range(1, 10):
 
     print(f"Order {order} coefficients:", coefficients)
 
+# Fit exponential model to the training data
+exponential_parameters, exponential_covariance = curve_fit(
+    exponential_model,
+    x_train,
+    y_train,
+    p0=[1, 0.001],
+    maxfev=10000
+)
+
+print("\nExponential model parameters:")
+print(exponential_parameters)
+
+# Calculate parameter uncertainties
+exponential_uncertainties = np.sqrt(
+    np.diag(exponential_covariance)
+)
+
+print("Exponential parameter uncertainties:")
+print(exponential_uncertainties)
+
 # Print parameter values and uncertainties for the best model
 print("\nBest model: Order 4")
 print("Parameter values:")
@@ -78,6 +103,15 @@ for order, coefficients in models.items():
     print(f"Order {order} forecast:")
     print(predictions)
 
+# Forecast using the exponential model
+exponential_forecast = exponential_model(
+    x_test,
+    *exponential_parameters
+)
+
+print("\nExponential forecast:")
+print(exponential_forecast)
+
 # Calculate chi-squared for each model
 chi_squared = {}
 
@@ -86,6 +120,7 @@ for order, predictions in forecasts.items():
     chi_squared[order] = np.sum(residuals ** 2)
 
     print(f"Order {order} chi-squared:", chi_squared[order])
+
 
 # Calculate chi-squared per degree of freedom
 chi_squared_reduced = {}
@@ -203,3 +238,29 @@ plt.tight_layout()
 plt.savefig("model_comparison.png")
 
 plt.show()
+
+# Calculate chi-squared for exponential model
+exponential_residuals = y_test - exponential_forecast
+
+exponential_chi_squared = np.sum(
+    exponential_residuals ** 2
+)
+
+print(
+    "Exponential chi-squared:",
+    exponential_chi_squared
+)
+
+# Calculate BIC for exponential model
+n = len(y_test)
+k = 2
+
+exponential_bic = (
+    n * np.log(exponential_chi_squared / n)
+    + k * np.log(n)
+)
+
+print(
+    "Exponential BIC:",
+    exponential_bic
+)
