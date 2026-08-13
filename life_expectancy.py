@@ -73,7 +73,24 @@ for order, predictions in forecasts.items():
     chi_squared[order] = np.sum(residuals ** 2)
 
     print(f"Order {order} chi-squared:", chi_squared[order])
-    
+
+# Calculate chi-squared per degree of freedom
+chi_squared_reduced = {}
+
+for order, chi_value in chi_squared.items():
+    degrees_of_freedom = len(y_test) - (order + 1)
+
+    if degrees_of_freedom > 0:
+        reduced_chi_squared = chi_value / degrees_of_freedom
+    else:
+        reduced_chi_squared = np.nan
+
+    chi_squared_reduced[order] = reduced_chi_squared
+
+    print(
+        f"Order {order} chi-squared per degree of freedom:",
+        reduced_chi_squared
+    )
 # Plot the polynomial forecasts
 plt.figure(figsize=(12, 6))
 
