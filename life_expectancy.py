@@ -82,7 +82,7 @@ for order, chi_value in chi_squared.items():
     bic_values[order] = bic
 
     print(f"Order {order} BIC:", bic)
-    
+
 # Create two graphs side by side
 fig, axes = plt.subplots(1, 2, figsize=(16, 6))
 
@@ -123,5 +123,48 @@ plt.tight_layout()
 
 # Save the combined figure
 plt.savefig("life_expectancy_forecasts.png")
+
+plt.show()
+
+# Prepare values for the model comparison plots
+orders = np.array(list(models.keys()))
+reduced_chi_values = np.array(
+    [chi_squared_reduced[order] for order in orders]
+)
+bic_array = np.array(
+    [bic_values[order] for order in orders]
+)
+
+# Create model comparison plots
+fig, axes = plt.subplots(1, 2, figsize=(14, 6))
+
+# Plot reduced chi-squared
+axes[0].plot(
+    orders,
+    reduced_chi_values,
+    marker="o"
+)
+
+axes[0].set_xlabel("Polynomial order")
+axes[0].set_ylabel("Chi-squared per degree of freedom")
+axes[0].set_title("Chi-squared per Degree of Freedom")
+axes[0].set_xticks(orders)
+
+# Plot BIC
+axes[1].plot(
+    orders,
+    bic_array,
+    marker="o"
+)
+
+axes[1].set_xlabel("Polynomial order")
+axes[1].set_ylabel("BIC")
+axes[1].set_title("BIC vs Polynomial Order")
+axes[1].set_xticks(orders)
+
+plt.tight_layout()
+
+# Save the model comparison plot
+plt.savefig("model_comparison.png")
 
 plt.show()
