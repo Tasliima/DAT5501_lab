@@ -1,4 +1,5 @@
 import pandas as pd
+import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import precision_score, recall_score, f1_score
@@ -37,22 +38,98 @@ X_train, X_test, y_train, y_test = train_test_split(
     stratify=y
 )
 
-# Create a basic decision tree
-model = DecisionTreeClassifier(random_state=42)
+# Test different tree depths
+depths = range(1, 11)
 
-# Train the model
-model.fit(X_train, y_train)
+precision_scores = []
+recall_scores = []
+f1_scores = []
 
-# Make predictions
-y_pred = model.predict(X_test)
+print("Decision Tree Optimisation")
+print("--------------------------")
 
-# Evaluate the model
-precision = precision_score(y_test, y_pred)
-recall = recall_score(y_test, y_pred)
-f1 = f1_score(y_test, y_pred)
+for depth in depths:
 
-print("Decision Tree Results")
-print("---------------------")
-print(f"Precision: {precision:.3f}")
-print(f"Recall:    {recall:.3f}")
-print(f"F1 score:  {f1:.3f}")
+    model = DecisionTreeClassifier(
+        max_depth=depth,
+        random_state=42
+    )
+
+    model.fit(X_train, y_train)
+
+    y_pred = model.predict(X_test)
+
+    precision = precision_score(y_test, y_pred)
+    recall = recall_score(y_test, y_pred)
+    f1 = f1_score(y_test, y_pred)
+
+    precision_scores.append(precision)
+    recall_scores.append(recall)
+    f1_scores.append(f1)
+
+    print(
+        f"Depth {depth}: "
+        f"Precision = {precision:.3f}, "
+        f"Recall = {recall:.3f}, "
+        f"F1 = {f1:.3f}"
+    )
+
+# Find the depth with the highest F1 score
+best_index = f1_scores.index(max(f1_scores))
+best_depth = list(depths)[best_index]
+
+print()
+print(f"Best depth based on F1 score: {best_depth}")
+print(f"Best F1 score: {f1_scores[best_index]:.3f}")
+
+# Plot Precision, Recall and F1 against tree depth
+plt.figure(figsize=(10, 6))
+
+plt.plot(depths, precision_scores, marker="o", label="Precision")
+plt.plot(depths, recall_scores, marker="o", label="Recall")
+plt.plot(depths, f1_scores, marker="o", label="F1 score")
+
+plt.xlabel("Decision Tree Depth")
+plt.ylabel("Score")
+plt.title("Decision Tree Performance vs Depth")
+plt.xticks(list(depths))
+plt.ylim(0, 1.05)
+plt.legend()
+plt.grid(True)
+
+plt.savefig("decision_tree_depth.png")
+plt.show()
+
+# Train the best model
+best_model = DecisionTreeClassifier(
+    max_depth=best_depth,
+    random_state=42
+)
+
+best_model.fit(X_train, y_train)
+
+# Calculate feature importance
+feature_importance = pd.Series(
+    best_model.feature_importances_,
+    index=X.columns
+).sort_values(ascending=False)
+
+print()
+print("Most Important Features")
+print("-----------------------")
+
+for feature, importance in feature_importance.head(10).items():
+    print(f"{feature}: {importance:.4f}")
+
+# Plot the top 10 important features
+plt.figure(figsize=(10, 6))
+
+feature_importance.head(10).sort_values().plot(kind="barh")
+
+plt.xlabel("Feature Importance")
+plt.ylabel("Feature")
+plt.title("Top 10 Most Important Features")
+
+plt.tight_layout()
+plt.savefig("decision_tree_feature_importance.png")
+plt.show()
