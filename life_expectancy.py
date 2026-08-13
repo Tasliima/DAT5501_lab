@@ -7,11 +7,11 @@ data = pd.read_csv("life-expectancy.csv")
 # Select global data
 world = data[data["Entity"] == "World"]
 
-# Plot global life expectancy
-plt.plot(world["Year"], world["Life expectancy"])
+# Use all data except the final 10 years for fitting
+training = world[world["Year"] <= 2013]
 
-plt.xlabel("Year")
-plt.ylabel("Life expectancy")
-plt.title("Global Life Expectancy Over Time")
+# Keep the final 10 years to compare our forecasts with reality
+testing = world[world["Year"] > 2013]
 
-plt.show()
+print("Training data:", training["Year"].min(), "to", training["Year"].max())
+print("Testing data:", testing["Year"].min(), "to", testing["Year"].max())
