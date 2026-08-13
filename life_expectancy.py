@@ -65,7 +65,15 @@ for order, coefficients in models.items():
     print(f"Order {order} forecast:")
     print(predictions)
 
+# Calculate the sum of squared residuals for each model
+chi_squared = {}
 
+for order, predictions in forecasts.items():
+    residuals = y_test - predictions
+    chi_squared[order] = np.sum(residuals ** 2)
+
+    print(f"Order {order} chi-squared:", chi_squared[order])
+    
 # Plot the polynomial forecasts
 plt.figure(figsize=(12, 6))
 
