@@ -33,6 +33,12 @@ for n in range(7, min(366, len(price_changes) + 1)):
     n_values.append(n)
     sorting_times.append(sorting_time)
 
+# Calculate daily price changes
+prices = data["Close/Last"].values
+price_changes = prices[:-1] - prices[1:]
+
+print(price_changes[:10])
+
 # Plot sorting time against n
 plt.plot(n_values, sorting_times)
 
